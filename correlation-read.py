@@ -66,9 +66,9 @@ def burst(error):
 	
 
 
-filename = "correlation-6node.pck"
+filename = "log.pck"
 f = open (filename, "rb")
-nodes = 2 
+nodes = 5 
 
 
 data = list()
@@ -87,14 +87,16 @@ try:
 		
 		 for i in range (0, nodes):
 			 for j in range(0, nodes):
-				 print (i, " ", j)
+				# print (i, " ", j)
 				 co = collections.Counter(error_node[i])
 				 val = co.values()
 				 loss = float(val[0])/len(error_node[0])
-				 data.append( {'c1': i, 'c2': j, 'rate': data_rate, 'start': start_time, 'end': end_time, 				'corr': pearsonr(error_node[i], error_node[j])[0], 'p':pearsonr(error_node[i], error_node[j])[1], 'loss':loss})
+				 if loss == 1.0 and len(co) == 1:
+					 loss=0
+				 data.append( {'c1': i, 'c2': j, 'rate': data_rate, 'start': start_time, 'end': end_time, 'corre': pearsonr(error_node[i], error_node[j])[0], 'p':pearsonr(error_node[i], error_node[j])[1], 'loss':loss})
 
 
-		 print 'loaded: '
+		# print 'loaded: '
 		 
 except EOFError:
 	  print 'End of file reached'
@@ -102,11 +104,14 @@ except EOFError:
 
 df = pd.DataFrame(data)
 
-a = df.query('c1 > 0')
+a = df.query('c1 == 0 and c2 == 1')
 #print df
-print a
+#a =df[ df.c1==1 and df.c2==2]
 
+print a[ ['corre','c1'] ]
 
+b = df[ (df['c1'] == 0) & (df['c2'] == 1) ]
+print b.corre
 
 #print burst(error_node[1])
 #print burst(error_node[2])
@@ -121,3 +126,4 @@ print np.mean(c2)
 print np.mean(c3)
 
 """
+

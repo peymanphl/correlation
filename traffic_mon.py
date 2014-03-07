@@ -1,7 +1,7 @@
 from threading import Thread
 import paramiko
 import time 
-from scipy.stats.stats import pearsonr
+#from scipy.stats.stats import pearsonr
 import numpy as np
 import subprocess as proc
 import Queue
@@ -35,12 +35,14 @@ def listen(Result):
 	f = open("data_rate","w") 
 	result = proc.Popen(["capinfos","-T","-i","tcpdump"], stdout=proc.PIPE)
         f.close()
+	data_rate=0
         for ln in result.stdout:
             line = ln.split()
             if line[0] == "tcpdump":
                  Result.put(float(line[1]))
-                 print line[1]
+                 data_rate = line[1]
 
+	return data_rate
 """
 monitor = "rasp05.lab.es.aau.dk"
 print "hi"
@@ -56,5 +58,5 @@ mon.start()
 time.sleep(5)
 kill_server.start()
 listen_server.join()
-"""
 
+"""

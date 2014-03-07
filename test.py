@@ -22,7 +22,7 @@ des.insert(4, "rasp06.lab.es.aau.dk")
 monitor = "rasp05.lab.es.aau.dk"
 time_out = 100
 max_des = 5
-max_tx = 100
+max_tx = 100000
 iteration = 10000
 log = "log.pck"
 Result = Queue.Queue()
@@ -65,7 +65,8 @@ for i in range (1, iteration):
 	end_time = datetime.datetime.today()
 	
         kill_server.start()
-        listen_server.join()
+	mon.join()
+	listen_server.join()
       	data_rate = Result.get()/(1024*8)
 	print ("data rate", data_rate)
 
@@ -81,11 +82,15 @@ for i in range (1, iteration):
 	pickle.dump(end_time, f)
 	pickle.dump(data_rate, f)
 	f.close()
-        print error_node
+     	print error_node[0]
+     	print error_node[1]
+     	print error_node[2]
+     	print error_node[3]
+     	print error_node[4]
 
-	print pearsonr(error_node[0], error_node[1])
-	print pearsonr(error_node[0], error_node[2])
-	print pearsonr(error_node[0], error_node[3])
-	print pearsonr(error_node[0], error_node[4])
+	#print pearsonr(error_node[0], error_node[1])
+	#print pearsonr(error_node[0], error_node[2])
+	#print pearsonr(error_node[0], error_node[3])
+	#print pearsonr(error_node[0], error_node[4])
 
 
